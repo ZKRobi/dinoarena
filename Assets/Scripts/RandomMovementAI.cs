@@ -6,7 +6,6 @@ public class RandomMovementAI : MonoBehaviour
 {
     public float directionChangeInterval = 10;
 
-    private int walkableNodes = 0;
     private GameObject target;
     private AILerp ai;
     private float lastDirectionChange = 0;
@@ -17,6 +16,8 @@ public class RandomMovementAI : MonoBehaviour
         ai = GetComponent<AILerp>();
 
         ai.target = target.transform;
+
+
     }
 
     // Update is called once per frame
@@ -25,10 +26,21 @@ public class RandomMovementAI : MonoBehaviour
         lastDirectionChange += Time.deltaTime;
         if (directionChangeInterval < lastDirectionChange)
         {
-            target.transform.position = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0);
+            Debug.Log("It's direction change o'clock");
+            ChangeTarget();
             lastDirectionChange -= directionChangeInterval;
 
-            //ai.target = target.transform;
         }
+        else if (ai.targetReached && lastDirectionChange > 1)
+        {
+            Debug.Log("Target reached");
+            ChangeTarget();
+            lastDirectionChange = 0;
+        }
+    }
+
+    void ChangeTarget()
+    {
+        target.transform.position = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0);
     }
 }
